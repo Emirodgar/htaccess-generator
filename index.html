@@ -25,6 +25,7 @@
       h2 {
         font-size: 1.45rem;
         margin-top: 2rem;
+        margin-bottom: 2rem;
       }
 
       form {
@@ -38,6 +39,7 @@
         margin-top: 1rem;
         margin-bottom: 0;
       }
+
       [class*="col-"] {
         padding-top: 1rem;
         padding-bottom: 1rem;
@@ -49,7 +51,10 @@
         margin-top: 2rem;
         margin-bottom: 2rem;
       }
-      .lead, small {padding-left:10px;}
+      .lead, small {
+        padding-left:10px;
+      }
+      footer {padding: 2rem;}
   </style>
   </head>
 
@@ -58,7 +63,7 @@
 
       <h1>Free Htaccess Generator</h1>
       <p class="lead">Simple, free and online. Create, without error, your .htaccess file.</p>
-
+      <hr>
       <h3>Instructions</h3>
       <p>Fill the options and push "generate" button in order to get your .htaccess file. The copy and paste the content into your .htaccess. Remember, this file must be in the root of your site.</p>
 
@@ -94,6 +99,24 @@
           <small class="form-text text-muted">Example: index.php (default is index.html)</small>
         </div>
 
+        <div class="form-group">
+          <label for="htWebCharset">Default web charset</label>
+          <input type="text" class="form-control" id="htWebCharset" aria-describedby="Web charset" placeholder="Enter default charset">
+          <small class="form-text text-muted">Example: UTF-8</small>
+        </div>
+
+        <div class="form-group">
+          <label for="htForceDownload">Force download (filetype)</label>
+          <input type="text" class="form-control" id="AddType application/octet-stream " aria-describedby="Force download" placeholder="Enter files to force download when access">
+          <small class="form-text text-muted">Example: .avi .pdf .mp4</small>
+        </div>
+
+        <div class="form-group">
+          <label for="htAdminEmail">Administrator email</label>
+          <input type="text" class="form-control" id="htAdminEmail" aria-describedby="Admin email" placeholder="Enter default contact email on server error">
+          <small class="form-text text-muted">Example: webmaster@domain.com</small>
+        </div>
+
         <h2>Security</h2>
 
         <div class="form-check">
@@ -102,6 +125,26 @@
             Prevent directory navigation
           </label>
         </div>
+         <div class="form-check">
+          <label class="form-check-label">
+            <input type="checkbox" id="htDisableCgi" class="form-check-input">
+            Disable CGI execution
+          </label>
+        </div>
+
+        <br/>
+        <div class="form-group">
+          <label for="htDisallowScript">Disallow script execution</label>
+          <input type="text" class="form-control" id="htDisallowScript" aria-describedby="Disallow Script" placeholder="Enter scripts to prevent the execution">
+          <small class="form-text text-muted">Example: .php .jsp .cgi</small>
+        </div>
+
+        <div class="form-group">
+          <label for="htDenyRequests">Deny requests methods</label>
+          <input type="text" class="form-control" id="htDenyRequests" aria-describedby="Disallow request" placeholder="Enter methods to deny">
+          <small class="form-text text-muted">Example: get|post|put</small>
+        </div>
+
 
         <br/><br/>
         <button type="button" id="generateHtaccess" class="btn btn-primary">Generate .htaccess</button>
@@ -109,6 +152,8 @@
 
       <br/>
       <textarea id="htaccessFinal" rows="15" class="form-control"></textarea>
+
+      <footer class="text-center">Created by <a href="https://emirodgar.com">Emirodgar</a> / Salamanca (Spain) / 2018 - Free htaccess generator</footer>
 
 
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
@@ -148,17 +193,60 @@
                           "\nRewriteRule ^(.*)$ http"+paramHttps+"://%1/$1 [R=301,L]";
             }
 
+            //Config
+
             var htDefaultPage = $('#htDefaultPage').val();
             if(htDefaultPage!=''){
                htaccess += "\n\n#Default page"+
                             "\nDirectoryIndex "+htDefaultPage;
             }
 
-            var htDirectory = $('#htDirectory').val();
-            if(htDirectory!=''){
+            var htAdminEmail = $('#htAdminEmail').val();
+            if(htAdminEmail!=''){
+               htaccess +=  "\n\n#Default contact email"+
+                            "\nSetEnv SERVER_ADMIN "+htAdminEmail;
+            }
+
+            var htForceDownload = $('#htForceDownload').val();
+            if(htForceDownload!=''){
+               htaccess +=  "\n\n#Force download"+
+                            "\nAddType application/octet-stream  "+htForceDownload;
+            }
+
+
+            var htWebCharset = $('#htWebCharset').val();
+            if(htWebCharset!=''){
+               htaccess +=  "\n\n#Default charset"+
+                            "\nAddDefaultCharset "+htWebCharset;
+            }
+
+            //Security
+
+            if ($('#htDirectory').is(":checked")) {
                htaccess += "\n\n#Prevent directory navigation"+
                             "\nOptions All -Indexes";
             }
+            if ($('#htDisableCgi').is(":checked")) {
+               htaccess += "\n\n#Disable CGI"+
+                            "\nOptions -ExecCGI";
+            }
+
+            var htDisallowScript = $('#htDisallowScript').val();
+            if(htDisallowScript!=''){
+               htaccess += "\n\n#Disallow scripts execution"+
+                            "\nAddHandler " +htDisallowScript;
+            }
+
+            var htDenyRequests = $('#htDenyRequests').val();
+            if(htDenyRequests!=''){
+               htaccess += "\n\n#Deny request method"+
+                            "\nRewriteCond %{REQUEST_METHOD} !^("+htDenyRequests.toUpperCase()+")"+
+                            "\nRewriteRule .? - [F]";
+            }
+
+
+
+
 
 
 

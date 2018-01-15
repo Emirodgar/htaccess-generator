@@ -2,17 +2,17 @@
 
 You can try it here: https://emirodgar.github.io/htaccess-generator/
 
-##Public access options
+## Public access options
 - www redirect
 - https redirect
 
-##Config options
+## Config options
 - Default access page
 - Default charset
 - Force filetype download
 - Set admin mail
 
-##Security
+## Security options
 - Prevent directory navigation
 - Disable CGI execution
 - Disallow script execution

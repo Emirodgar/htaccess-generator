@@ -12,6 +12,10 @@ You can try it here: https://emirodgar.github.io/htaccess-generator/
 - Force filetype download
 - Set admin mail
 
+## Custom error pages
+- Error 404
+- Error 500
+
 ## Security options
 - Prevent directory navigation
 - Disable CGI execution

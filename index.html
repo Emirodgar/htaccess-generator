@@ -105,7 +105,7 @@
         <div class="form-group">
           <label for="htDefaultPage">Default access page</label>
           <input type="text" class="form-control" id="htDefaultPage" aria-describedby="Default page" placeholder="Enter default page (file)">
-          <small class="form-text text-muted">Example: index.php (default is index.html)</small>
+          <small class="form-text text-muted">Example: index.php index.html (default is index.html)</small>
         </div>
 
         <div class="form-group">
@@ -124,6 +124,20 @@
           <label for="htAdminEmail">Administrator email</label>
           <input type="text" class="form-control" id="htAdminEmail" aria-describedby="Admin email" placeholder="Enter default contact email">
           <small class="form-text text-muted">Example: webmaster@domain.com</small>
+        </div>
+
+         <h2>Custom errors pages</h2>
+
+        <div class="form-group">
+          <label for="htCustomError404">Error 404</label>
+          <input type="text" class="form-control" id="htCustomError404" aria-describedby="Custom 404" placeholder="Enter default 404 url">
+          <small class="form-text text-muted">Example: error404.html</small>
+        </div>
+
+        <div class="form-group">
+          <label for="htCustomError500">Error 500</label>
+          <input type="text" class="form-control" id="htCustomError500" aria-describedby="Custom 500" placeholder="Enter default 500 url">
+          <small class="form-text text-muted">Example: error500.html</small>
         </div>
 
         <h2>Security</h2>
@@ -154,6 +168,12 @@
           <small class="form-text text-muted">Example: get|post|put</small>
         </div>
 
+         <div class="form-group">
+          <label for="htHotlinking">Prevent hotlinking</label>
+          <input type="text" class="form-control" id="htHotlinking" aria-describedby="Prevent hotlinking" placeholder="Enter full image URL you want to show when someone uses your hosted images">
+          <small class="form-text text-muted">Example: https://mydomain.com/mylogo.png</small>
+        </div>
+
 
         <br/><br/>
         <button type="button" id="generateHtaccess" class="btn btn-primary">Generate .htaccess</button>
@@ -176,6 +196,8 @@
              var htaccess = '';
 
              var domain = $('#htDomain').val();
+             var domainReg = domain.replace(/\./g,'\\.');
+             if (domainReg =='') domainReg = 'CHANGEDOMAIN\\.com';
              var param = paramHttps = '';
 
              $('#htaccessFinal').val('');
@@ -229,6 +251,20 @@
                             "\nAddDefaultCharset "+htWebCharset;
             }
 
+             //Error
+
+            var htCustomError404 = $('#htCustomError404').val();
+            if(htCustomError404!=''){
+               htaccess += "\n\n#Default 404 error"+
+                            "\ErrorDocument 404 "+htCustomError404;
+            }
+
+            var htCustomError500 = $('#htCustomError500').val();
+            if(htCustomError500!=''){
+               htaccess += "\n\n#Default 500 error"+
+                            "\nErrorDocument 500 "+htCustomError404;
+            }
+
             //Security
 
             if ($('#htDirectory').is(":checked")) {
@@ -251,6 +287,14 @@
                htaccess += "\n\n#Deny request method"+
                             "\nRewriteCond %{REQUEST_METHOD} !^("+htDenyRequests.toUpperCase()+")"+
                             "\nRewriteRule .? - [F]";
+            }
+
+            var htHotlinking = $('#htHotlinking').val();
+            if(htHotlinking!=''){
+               htaccess += "\n\n#Prevent hotlinking"+
+                            "\nRewriteCond %{HTTP_REFERER} !^$"+
+                            "\nRewriteCond %{HTTP_REFERER} !^http://(www\.)?"+domainReg+"/.*$ [NC]"+
+                            "\nRewriteRule \.(gif|jpg|swf|flv|png)$ "+htHotlinking+" [R=302,L]";
             }
 
             $('#htaccessFinal').val(htaccess);

@@ -162,7 +162,7 @@
       <br/>
       <textarea id="htaccessFinal" rows="15" class="form-control"></textarea>
 
-      <footer class="text-center">Created by <a href="https://emirodgar.com">Emirodgar</a> / Salamanca (Spain) / 2018 - <b>Free htaccess generator</b></footer>
+      <footer class="text-center">Created by <a id="authorLink" target="_blank" href="https://emirodgar.com">Emirodgar</a> / Salamanca (Spain) / 2018 - <b>Free htaccess generator</b></footer>
 
 
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
@@ -252,13 +252,6 @@
                             "\nRewriteCond %{REQUEST_METHOD} !^("+htDenyRequests.toUpperCase()+")"+
                             "\nRewriteRule .? - [F]";
             }
-
-
-
-
-
-
-
 
             $('#htaccessFinal').val(htaccess);
            }

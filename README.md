@@ -21,3 +21,4 @@ You can try it here: https://emirodgar.github.io/htaccess-generator/
 - Disable CGI execution
 - Disallow script execution
 - Deny request methods
+- Prevent hotlinking

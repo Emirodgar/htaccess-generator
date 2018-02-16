@@ -8,7 +8,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Free Htaccess Online Generator</title>
+    <title>Free .htaccess Online Generator</title>
 
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
 
@@ -70,11 +70,11 @@
   <body>
     <div class="container">
 
-      <h1>Free Htaccess Generator</h1>
+      <h1>Free .htaccess Generator</h1>
       <p class="lead">Simple, free and online. Create, without error, your .htaccess file.</p>
       <hr>
       <h3>Instructions</h3>
-      <p>Fill the options and push "generate" button in order to get your .htaccess file. The copy and paste the content into your .htaccess. Remember, this file must be in the root of your site.</p>
+      <p>Fill the options and push "generate" button in order to get your .htaccess file. The copy and paste the content into your .htaccess file. Remember, this file must be in the root of your site.</p>
 
        <form>
 
@@ -102,6 +102,15 @@
 
         <h2>Config website</h2>
 
+        <div class="form-check">
+          <label class="form-check-label">
+            <input type="checkbox" id="ht404Redirect" class="form-check-input">
+            Prevent 404 errors for non-existing folders
+          </label>
+        </div>
+
+        <br/>
+
         <div class="form-group">
           <label for="htDefaultPage">Default access page</label>
           <input type="text" class="form-control" id="htDefaultPage" aria-describedby="Default page" placeholder="Enter default page (file)">
@@ -121,12 +130,58 @@
         </div>
 
         <div class="form-group">
+          <label for="htFileSize">Limit upload file size</label>
+          <input type="text" class="form-control" id="htFileSize" aria-describedby="File size" placeholder="Enter maximun file size in bytes">
+          <small class="form-text text-muted">Example: 2147483647 (2GB)</small>
+        </div>
+
+        <div class="form-group">
           <label for="htAdminEmail">Administrator email</label>
           <input type="text" class="form-control" id="htAdminEmail" aria-describedby="Admin email" placeholder="Enter default contact email">
           <small class="form-text text-muted">Example: webmaster@domain.com</small>
         </div>
 
-         <h2>Custom errors pages</h2>
+         <h2>Performance</h2>
+
+         <div class="form-check">
+          <label class="form-check-label">
+            <input type="checkbox" id="htGzip" class="form-check-input">
+            Enable Gzip compression
+          </label>
+        </div>
+        <div class="form-check">
+          <label class="form-check-label">
+            <input type="checkbox" id="htKeepAlive" class="form-check-input">
+            Enable Keep-Alive header
+          </label>
+        </div>
+        <br/>
+
+         <div class="form-group">
+            <label for="htExpiresHeaders">Expires Headers</label>
+            <input type="text" class="form-control" id="htExpiresHeadersFormat" value="flv|ico|pdf|avi|mov|ppt|doc|mp3|wmv|wav">
+
+            <div class="form-row">
+              <div class="col-10" style="background-color:white; border:0;">
+              <input type="text" class="form-control" id="htExpiresHeaders" aria-describedby="Expires headers" placeholder="Set the time for headers to expire (seconds)">
+              <small class="form-text text-muted">Example: 29030400</small>
+              </div>
+              <div class="col-md-2" style="background-color:white; border:0;">
+                <select class="form-control" onchange="$('#htExpiresHeaders').val($(this).val());">
+                  <option>Time helper</option>
+                  <option value="1800">30 min</option>
+                  <option value="3600">1 hour</option>
+                  <option value="43200">12 hours</option>
+                  <option value="86400">1 day</option>
+                  <option value="604800">1 week</option>
+                  <option value="2419200">1 month</option>
+                  <option value="29030400">1 year</option>
+                </select>
+              </div>
+            </div>
+        </div>
+
+        <h2>Custom errors pages</h2>
 
         <div class="form-group">
           <label for="htCustomError404">Error 404</label>
@@ -154,6 +209,36 @@
             Disable CGI execution
           </label>
         </div>
+        <div class="form-check">
+          <label class="form-check-label">
+            <input type="checkbox" id="htDisableTech" class="form-check-input">
+            Hide information about web server technology
+          </label>
+        </div>
+        <div class="form-check">
+          <label class="form-check-label">
+            <input type="checkbox" id="htDisableFrame" class="form-check-input">
+            Do not allow pages to be framed
+          </label>
+        </div>
+        <div class="form-check">
+          <label class="form-check-label">
+            <input type="checkbox" id="htDisableSign" class="form-check-input">
+            Disable server sign
+          </label>
+        </div>
+         <div class="form-check">
+          <label class="form-check-label">
+            <input type="checkbox" id="htSpamBots" class="form-check-input">
+            Block SPAM bots
+          </label>
+        </div>
+         <div class="form-check">
+          <label class="form-check-label">
+            <input type="checkbox" id="htIllegal" class="form-check-input">
+            Prevent illegal or unsafe access (restrictive mode)
+          </label>
+        </div>
 
         <br/>
         <div class="form-group">
@@ -173,7 +258,6 @@
           <input type="text" class="form-control" id="htHotlinking" aria-describedby="Prevent hotlinking" placeholder="Enter full image URL you want to show when someone uses your hosted images">
           <small class="form-text text-muted">Example: https://mydomain.com/mylogo.png</small>
         </div>
-
 
         <br/><br/>
         <button type="button" id="generateHtaccess" class="btn btn-primary">Generate .htaccess</button>
@@ -198,7 +282,8 @@
              var domain = $('#htDomain').val();
              var domainReg = domain.replace(/\./g,'\\.');
              if (domainReg =='') domainReg = 'CHANGEDOMAIN\\.com';
-             var param = paramHttps = '';
+             var param = paramHttps = htaccessIllegal = htaccessSpam = '';
+             var rewrite = false;
 
              $('#htaccessFinal').val('');
 
@@ -224,7 +309,19 @@
                           "\nRewriteRule ^(.*)$ http"+paramHttps+"://%1/$1 [R=301,L]";
             }
 
+
+
+
             //Config
+
+
+
+            if ($('#ht404Redirect').is(":checked"))
+             {
+
+               htaccess +=  "\n\n#Prevent 404 en non-existing folders"+
+                            "\nOptions -MultiViews";
+             }
 
             var htDefaultPage = $('#htDefaultPage').val();
             if(htDefaultPage!=''){
@@ -251,6 +348,46 @@
                             "\nAddDefaultCharset "+htWebCharset;
             }
 
+            var htFileSize = $('#htFileSize').val();
+            if(htFileSize!=''){
+               htaccess +=  "\n\n#Limit upload file size"+
+                            "\nLimitRequestBody  "+htFileSize;
+            }
+
+             //Performance
+
+            if ($('#htGzip').is(":checked")) {
+               htaccess += "\n\n#Gzip compression"+
+                            "\n<IfModule mod_gzip.c>"+
+                            "\n   mod_gzip_on       Yes"+
+                            "\n   mod_gzip_dechunk  Yes"+
+                            "\n   mod_gzip_item_include file      .(html?|txt|css|js|php|pl)$"+
+                            "\n   mod_gzip_item_include handler   ^cgi-script$"+
+                            "\n   mod_gzip_item_include mime      ^text/.*"+
+                            "\n   mod_gzip_item_include mime      ^application/x-javascript.*"+
+                            "\n   mod_gzip_item_exclude mime      ^image/.*"+
+                            "\n   mod_gzip_item_exclude rspheader ^Content-Encoding:.*gzip.*"+
+                            "\n</IfModule>";
+            }
+
+            if ($('#htKeepAlive').is(":checked")) {
+               htaccess += "\n\n#Enable Keep-Alive Headers"+
+                            "\n<IfModule mod_headers.c>"+
+                            "\n   Header set Connection Keep-Alive"+
+                            "\n</IfModule>";
+            }
+
+
+            var htExpiresHeaders = $('#htExpiresHeaders').val();
+            var htExpiresHeadersFormat = $('#htExpiresHeadersFormat').val();
+            if(htExpiresHeaders!=''){
+               htaccess += "\n\n#Set Expires Headers"+
+                            '\n<FilesMatch "\.('+htExpiresHeadersFormat+')$">'+
+                            "\n   ExpiresDefault A"+htExpiresHeaders+
+                            "\n</FilesMatch>";
+            }
+
+
              //Error
 
             var htCustomError404 = $('#htCustomError404').val();
@@ -275,6 +412,18 @@
                htaccess += "\n\n#Disable CGI"+
                             "\nOptions -ExecCGI";
             }
+            if ($('#htDisableTech').is(":checked")) {
+               htaccess += "\n\n#Hide PoweredBy"+
+                            "\nHeader unset X-Powered-By";
+            }
+            if ($('#htDisableFrame').is(":checked")) {
+               htaccess += "\n\n#Do not allow pages to be framed"+
+                            "\nHeader set X-Frame-Options SAMEORIGIN";
+            }
+            if ($('#htDisableSign').is(":checked")) {
+               htaccess += "\n\n#Disable server sign"+
+                            "\nServerSignature Off";
+            }
 
             var htDisallowScript = $('#htDisallowScript').val();
             if(htDisallowScript!=''){
@@ -297,12 +446,56 @@
                             "\nRewriteRule \.(gif|jpg|swf|flv|png)$ "+htHotlinking+" [R=302,L]";
             }
 
+
+             if ($('#htSpamBots').is(":checked")) {
+              rewrite= true;
+              htaccessSpam = "\n\n   #Block Spam Bots"+
+                          "\n   RewriteCond %{HTTP_USER_AGENT} ^(aesop_com_spiderman|alexibot|backweb|bandit|batchftp|bigfoot) [NC,OR]" +
+                          "\n   RewriteCond %{HTTP_USER_AGENT} ^(black.?hole|blackwidow|blowfish|botalot|buddy|builtbottough|bullseye) [NC,OR]" +
+                          "\n   RewriteCond %{HTTP_USER_AGENT} ^(cheesebot|cherrypicker|chinaclaw|collector|copier|copyrightcheck) [NC,OR]" +
+                          "\n   RewriteCond %{HTTP_USER_AGENT} ^(cosmos|crescent|curl|custo|da|diibot|disco|dittospyder|dragonfly) [NC,OR]" +
+                          "\n   RewriteCond %{HTTP_USER_AGENT} ^(drip|easydl|ebingbong|ecatch|eirgrabber|emailcollector|emailsiphon) [NC,OR]" +
+                          "\n   RewriteCond %{HTTP_USER_AGENT} ^(emailwolf|erocrawler|exabot|eyenetie|filehound|flashget|flunky) [NC,OR]" +
+                          "\n   RewriteCond %{HTTP_USER_AGENT} ^(frontpage|getright|getweb|go.?zilla|go-ahead-got-it|gotit|grabnet) [NC,OR]" +
+                          "\n   RewriteCond %{HTTP_USER_AGENT} ^(grafula|harvest|hloader|hmview|httplib|httrack|humanlinks|ilsebot) [NC,OR]" +
+                          "\n   RewriteCond %{HTTP_USER_AGENT} ^(infonavirobot|infotekies|intelliseek|interget|iria|jennybot|jetcar) [NC,OR]" +
+                          "\n   RewriteCond %{HTTP_USER_AGENT} ^(joc|justview|jyxobot|kenjin|keyword|larbin|leechftp|lexibot|lftp|libweb) [NC,OR]" +
+                          "\n   RewriteCond %{HTTP_USER_AGENT} ^web(zip|emaile|enhancer|fetch|go.?is|auto|bandit|clip|copier|master|reaper|sauger|site.?quester|whack) [NC,OR]" +
+                          "\n   RewriteCond %{HTTP_USER_AGENT} ^.*(craftbot|download|extract|stripper|sucker|ninja|clshttp|webspider|leacher|collector|grabber|webpictures).*$ [NC]" +
+                          "\n   RewriteRule . - [F,L]";
+            }
+
+            if ($('#htIllegal').is(":checked")) {
+              rewrite= true;
+              htaccessIllegal = "\n\n   #Block illegal or unsafe access"+
+                          "\n   RewriteCond %{REQUEST_METHOD} ^(HEAD|TRACE|DELETE|TRACK) [NC,OR]" +
+                          "\n   RewriteCond %{THE_REQUEST} ^.*(\\r|\\n|%0A|%0D).* [NC,OR]" +
+                          "\n   RewriteCond %{HTTP_COOKIE} ^.*(<|>|'|'|%0A|%0D|%27|%3C|%3E|%00).* [NC,OR]" +
+                          "\n   RewriteCond %{HTTP_USER_AGENT} ^.*(<|>|'|'|%0A|%0D|%27|%3C|%3E|%00).* [NC,OR]" +
+                          "\n   RewriteCond %{QUERY_STRING} ^.*(localhost|loopback|127\.0\.0\.1).* [NC,OR]" +
+                          "\n   RewriteCond %{QUERY_STRING} ^.*(<|>|'|'|%0A|%0D|%27|%3C|%3E|%00).* [NC]" +
+                          "\n   RewriteRule (.*) - [F,L]";
+            }
+
+
+
+            if (rewrite == true){
+              htaccess += "\n\n#Mod Rewrite"+
+                          "\n<IfModule mod_rewrite.c>"+
+                          "\n   RewriteEngine On"+
+                          "\n   Options +FollowSymlinks"+
+                          "\n   RewriteBase /"+
+                          htaccessSpam+
+                          htaccessIllegal+
+                          "\n</IfModule>";
+            }
+
             $('#htaccessFinal').val(htaccess);
            }
         );
 
       </script>
 
-    </div> <!-- /container -->
+    </div>
   </body>
 </html>
